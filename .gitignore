@@ -1,0 +1,7 @@
+# C Objects/binaries
+*.a
+*.o
+config.h
+sysmgr
+runsyssv
+svctl

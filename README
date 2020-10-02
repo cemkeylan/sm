@@ -1,2 +1,7 @@
-sysmgr in C
------------
+sysmgr
+------
+
+sysmgr implemented in C. Doesn't work at the moment. Most of the stuff are tests
+to make sure functions are running correctly
+
+POSIX shell / C hybrid here: https://git.ckyln.com/sysmgr

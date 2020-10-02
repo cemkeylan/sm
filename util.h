@@ -1,5 +1,7 @@
 /* See LICENSE for copyright information */
 
+#ifndef _UTIL_H
+#define _UTIL_H
 #ifndef _LIMITS_H
 #include <limits.h>
 #endif
@@ -13,16 +15,15 @@
 #endif
 
 typedef struct service {
-  char name[NAME_MAX];
-  char sysdir[PATH_MAX];
-  char rundir[PATH_MAX];
-  char pidfile[PATH_MAX];
-  char svfile[PATH_MAX];
+	char name[NAME_MAX];
+	char sysdir[PATH_MAX];
+	char rundir[PATH_MAX];
+	char pidfile[PATH_MAX];
+	char svfile[PATH_MAX];
+	char svrundir[PATH_MAX];
 } service;
 
-/*
- * Get information about the service.
- */
+/* service.c */
 service *sv_init(service *sv, char *sv_name);
 
 /* proc.c */
@@ -47,3 +48,12 @@ void weprintf(const char *, ...);
 long long strtonum(const char *, long long, long long, const char **);
 long long enstrtonum(int, const char *, long long, long long);
 long long estrtonum(const char *, long long, long long);
+
+/* mkdirp.c */
+int mkdirp(const char *path);
+
+/* estrlcpy.c */
+size_t strlcpy(char *, const char *, size_t);
+size_t estrlcpy(char *, const char *, size_t);
+
+#endif

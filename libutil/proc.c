@@ -27,9 +27,6 @@ getsvpid(service *sv)
 int
 writesvpid(char *file, pid_t pid)
 {
-	if (access(file, W_OK) == -1)
-		return -1;
-
 	FILE *pidfile;
 
 	pidfile = fopen(file, "w");

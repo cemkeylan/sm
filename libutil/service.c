@@ -10,6 +10,7 @@ sv_init(service *sv, char *sv_name)
 	sprintf(sv->rundir, "%s", getenv_fallback("RUNDIR", "/run/sysmgr"));
 	sprintf(sv->pidfile, "%s/%s/pid", sv->rundir, sv->name);
 	sprintf(sv->svfile, "%s/%s", sv->sysdir, sv_name);
+	sprintf(sv->svrundir, "%s/%s", sv->rundir, sv_name);
 
 	return sv;
 }

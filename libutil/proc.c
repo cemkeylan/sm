@@ -16,7 +16,26 @@ getsvpid(service *sv)
 
 	pidfile = fopen(sv->pidfile, "r");
 	if (pidfile == NULL)
-		return -2;
+		return -1;
+
+	fscanf(pidfile, "%d", &pid);
+	fclose(pidfile);
+
+	return pid;
+}
+
+pid_t
+getsyspid(service *sv)
+{
+	pid_t pid;
+
+	if (access(sv->syspidfile, R_OK) == -1)
+		return -1;
+	FILE *pidfile;
+
+	pidfile = fopen(sv->syspidfile, "r");
+	if (pidfile == NULL)
+		return -1;
 
 	fscanf(pidfile, "%d", &pid);
 	fclose(pidfile);

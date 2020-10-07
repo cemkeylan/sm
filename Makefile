@@ -12,6 +12,7 @@ LIBUTILSRC = \
 	libutil/io.c \
 	libutil/mkdirp.c \
 	libutil/proc.c \
+	libutil/rm.c \
 	libutil/service.c \
 	libutil/strlcpy.c \
 	libutil/strtonum.c \

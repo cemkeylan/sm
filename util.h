@@ -19,15 +19,19 @@ typedef struct service {
 	char sysdir[PATH_MAX];
 	char rundir[PATH_MAX];
 	char pidfile[PATH_MAX];
+	char syspidfile[PATH_MAX];
 	char svfile[PATH_MAX];
 	char svrundir[PATH_MAX];
 } service;
 
 /* service.c */
 service *sv_init(service *sv, char *sv_name);
+void sv_start(service *sv);
+int  sv_check(service *sv);
 
 /* proc.c */
 int getsvpid(service *sv);
+int getsyspid(service *sv);
 int checkprocess(int pid);
 int writesvpid(char *file, pid_t pid);
 
@@ -55,5 +59,8 @@ int mkdirp(const char *path);
 /* estrlcpy.c */
 size_t strlcpy(char *, const char *, size_t);
 size_t estrlcpy(char *, const char *, size_t);
+
+/* rm.c */
+int rm_rf(char *path);
 
 #endif

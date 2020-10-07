@@ -1,5 +1,23 @@
+/* sysmgr -- A simplistic service supervisor.
+ *
+ * Copyright (C) 2020 Cem Keylan <cem@ckyln.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #include <unistd.h>
 #include <stdio.h>
@@ -10,7 +28,45 @@
 
 #include "util.h"
 #include "config.h"
-static char *argv0;
+static char *argv0, *rundir, *sysdir;
+
+void
+term(int sig)
+{
+	/* We are ignoring the sig variable */
+	(void)(sig);
+
+	DIR *dir;
+	struct dirent *ent;
+
+	if ((dir = opendir(rundir)) == NULL)
+		die("%s:", rundir);
+
+	while ((ent = readdir(dir)) != NULL) {
+		char realfile[PATH_MAX];
+		sprintf(realfile, "%s/%s", rundir, ent->d_name);
+
+		printf("%s\n", ent->d_name);
+
+		if (strncmp(ent->d_name, ".", 1) == 0 ||
+		    strcmp(ent->d_name, "pid") == 0)
+			continue;
+
+		printf("%s\n", ent->d_name);
+		struct service sv;
+		sv_init(&sv, ent->d_name);
+		pid_t pid = getsyspid(&sv);
+		if (pid == -1) {
+			perror(sv.name);
+			continue;
+		}
+		if (kill(pid, SIGTERM) != 0)
+			perror("kill");
+	}
+	sleep(1);
+	rm_rf(rundir);
+	exit(0);
+}
 
 void
 usage(void)
@@ -23,7 +79,6 @@ usage(void)
 int main(int argc, char *argv[])
 {
 	argv0 = argv[0];
-	char *sysdir, *rundir;
 	char sysmgr_pidfile[PATH_MAX];
 
 	if (argc > 1)
@@ -35,6 +90,11 @@ int main(int argc, char *argv[])
 
 	mkdirp(rundir);
 
+	/* Trap signals */
+	int signals[] = {SIGTERM, SIGINT, SIGHUP, SIGQUIT, SIGABRT};
+	for (long unsigned int i=0; i < sizeof(signals); i++)
+		signal(signals[i], term);
+
 	pid_t pid = getpid();
 
 	printf("RUNDIR: %s\nSYSDIR: %s\nselfpid: %d\n", rundir, sysdir, pid);
@@ -44,18 +104,24 @@ int main(int argc, char *argv[])
 	/* Go to the service directory and get all the service entries. */
 	DIR *dir;
 	struct dirent *ent;
-	if ((dir = opendir(sysdir)) == NULL)
-		die("%s:", sysdir);
-	while ((ent = readdir(dir)) != NULL) {
-		if (strncmp(ent->d_name, ".", 1) == 0)
-			continue;
-		printf("%s\n", ent->d_name);
-
-		struct service sv;
-		sv_init(&sv, ent->d_name);
-
+	while(1) {
+		if ((dir = opendir(sysdir)) == NULL)
+			die("%s:", sysdir);
+		while ((ent = readdir(dir)) != NULL) {
+			if (strncmp(ent->d_name, ".", 1) == 0)
+				continue;
+			struct service sv;
+			sv_init(&sv, ent->d_name);
+			if (sv_check(&sv) != 0) {
+				printf("%s\n", ent->d_name);
+				sv_start(&sv);
+			}
+		}
+		closedir(dir);
+		sleep(1);
 	}
-	closedir(dir);
+	wait(NULL);
+	term(SIGTERM);
 
 	return 0;
 }

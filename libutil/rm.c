@@ -1,7 +1,5 @@
 /* Remove directories
  *
- * This file is part of sysmgr.
- *
  * Function mostly taken from:
  * https://stackoverflow.com/a/5467788
  * Licensed under CC BY-SA 2.5

@@ -91,13 +91,12 @@ int main(int argc, char *argv[])
 	mkdirp(rundir);
 
 	/* Trap signals */
-	int signals[] = {SIGTERM, SIGINT, SIGHUP, SIGQUIT, SIGABRT};
-	for (long unsigned int i=0; i < sizeof(signals); i++)
-		signal(signals[i], term);
+	int sv_signals[] = {SIGTERM, SIGINT, SIGHUP, SIGQUIT, SIGABRT};
+	for (long unsigned int i=0; i < sizeof(sv_signals); i++)
+		signal(sv_signals[i], term);
 
 	pid_t pid = getpid();
 
-	printf("RUNDIR: %s\nSYSDIR: %s\nselfpid: %d\n", rundir, sysdir, pid);
 	if (writesvpid(sysmgr_pidfile, pid) != 0)
 		die("%s:", sysmgr_pidfile);
 
@@ -112,8 +111,7 @@ int main(int argc, char *argv[])
 				continue;
 			struct service sv;
 			sv_init(&sv, ent->d_name);
-			if (sv_check(&sv) != 0) {
-				printf("%s\n", ent->d_name);
+			if (sv_check(&sv, 0) != 0) {
 				sv_start(&sv);
 			}
 		}

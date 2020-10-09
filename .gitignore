@@ -1,3 +1,8 @@
+# -*- mode: gitignore; -*-
+# Emacs editor files
+*~
+\#*\#
+.\#*
 # C Objects/binaries
 *.a
 *.o

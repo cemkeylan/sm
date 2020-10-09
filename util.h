@@ -22,12 +22,14 @@ typedef struct service {
 	char syspidfile[PATH_MAX];
 	char svfile[PATH_MAX];
 	char svrundir[PATH_MAX];
+	char lockfile[PATH_MAX];
 } service;
 
 /* service.c */
 service *sv_init(service *sv, char *sv_name);
 void sv_start(service *sv);
-int  sv_check(service *sv);
+int  sv_check(service *sv, int force);
+int  sv_writelock(char *file, int sig);
 
 /* proc.c */
 int getsvpid(service *sv);

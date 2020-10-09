@@ -1,3 +1,18 @@
+Some of the utility functions here are taken from other places, here are their
+licenses. See the files for more information. Most of those are from sbase, but
+some of the ones from sbase are taken from other places as well.
+
+enprintf.c, mkdirp.c
+  Taken from https://core.suckless.org/sbase.          MIT/X Consortium License
+rm.c
+  Taken from https://stackoverflow.com/a/5467788.                  CC BY-SA 2.5
+strlcpy.c
+  Taken from sbase. Copyright (c) 1998 Todd C. Miller.              ISC License
+strtonum.c
+  Taken from sbase. Copyright (c) 2004 Ted Unangst and Todd Miller. ISC License
+
+--------------------------------------------------------------------------------
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 

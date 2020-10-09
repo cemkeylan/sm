@@ -20,17 +20,19 @@
 #include <sys/stat.h>
 
 #include "../util.h"
+#include "../config.h"
 
 service*
 sv_init(service *sv, char *sv_name)
 {
 	sprintf(sv->name, "%s", sv_name);
-	sprintf(sv->sysdir, "%s", getenv_fallback("SYSDIR", "/var/sysmgr"));
-	sprintf(sv->rundir, "%s", getenv_fallback("RUNDIR", "/run/sysmgr"));
+	sprintf(sv->sysdir, "%s", getenv_fallback("SYSDIR", sysdir_default));
+	sprintf(sv->rundir, "%s", getenv_fallback("RUNDIR", rundir_default));
 	sprintf(sv->pidfile, "%s/%s/pid", sv->rundir, sv->name);
 	sprintf(sv->syspidfile, "%s/%s/syspid", sv->rundir, sv->name);
 	sprintf(sv->svfile, "%s/%s", sv->sysdir, sv_name);
 	sprintf(sv->svrundir, "%s/%s", sv->rundir, sv_name);
+	sprintf(sv->lockfile, "%s/%s/lock", sv->rundir, sv->name);
 
 	return sv;
 }
@@ -50,23 +52,41 @@ void sv_start(service *sv)
 	}
 }
 
-int sv_check(service *sv)
+int sv_check(service *sv, int force)
 {
+	/* If force is specified '1', this will return the actual service status
+	 * regardless of the lockfile. The lockfile serves the purpose of
+	 * stopping services and making sure they are not restarted.
+	 */
 	pid_t pid;
 	struct stat sb;
-	char lockfile[PATH_MAX + sizeof("/lock")];
 
-	/* If a lockfile exists, we will assume that the service was stopped by
-	 * the user. */
-	sprintf(lockfile, "%s/lock", sv->svrundir);
-
-	if (lstat(lockfile, &sb) == 0)
-		return 0;
+	if (lstat(sv->lockfile, &sb) == 0) {
+		if (force == 1)
+			return -1;
+		else
+			return 0;
+	}
 
 	pid = getsyspid(sv);
 
 	if (pid < 0 || checkprocess(pid) != 0)
 		return -1;
+
+	return 0;
+}
+
+int sv_writelock(char *file, int sig)
+{
+	FILE *lockfile;
+
+	lockfile = fopen(file, "w");
+	if (lockfile == NULL) {
+		perror(file);
+		return -1;
+	}
+	fprintf(lockfile, "%d\n", sig);
+	fclose(lockfile);
 
 	return 0;
 }

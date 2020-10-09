@@ -1,3 +1,6 @@
+PREFIX = /usr/local
+BINDIR = ${PREFIX}/bin
+
 include config.mk
 
 .SUFFIXES:
@@ -20,7 +23,8 @@ LIBUTILSRC = \
 
 BIN = \
       sysmgr \
-      runsyssv
+      runsyssv \
+      svctl
 
 SRC = ${BIN:=.c}
 BINOBJ = ${SRC:.c=.o}
@@ -54,4 +58,12 @@ config.h:
 clean:
 	rm -f ${BIN} ${OBJ} ${LIBUTIL}
 
-.PHONY: all clean
+install: all
+	mkdir -p ${DESTDIR}${BINDIR}
+	cp ${BIN} ${DESTDIR}${BINDIR}
+	for bin in ${BIN}; do chmod 755 ${DESTDIR}${BINDIR}/$${bin}; done
+
+uninstall:
+	for bin in ${BIN}; do rm -f ${DESTDIR}${BINDIR}/$${bin}; done
+
+.PHONY: all clean install uninstall

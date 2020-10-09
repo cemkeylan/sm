@@ -29,8 +29,10 @@ getsyspid(service *sv)
 {
 	pid_t pid;
 
-	if (access(sv->syspidfile, R_OK) == -1)
+	if (access(sv->syspidfile, R_OK) == -1) {
+		perror(sv->syspidfile);
 		return -1;
+	}
 	FILE *pidfile;
 
 	pidfile = fopen(sv->syspidfile, "r");
@@ -49,10 +51,10 @@ writesvpid(char *file, pid_t pid)
 	FILE *pidfile;
 
 	pidfile = fopen(file, "w");
-	if (pidfile == NULL)
-		/* perror(file); */
-		return -2;
-
+	if (pidfile == NULL) {
+		perror(file);
+		return -1;
+	}
 	fprintf(pidfile, "%d\n", pid);
 	fclose(pidfile);
 

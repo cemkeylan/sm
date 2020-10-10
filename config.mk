@@ -1,4 +1,4 @@
-VERSION = git
+VERSION = 0.1.0
 
 PREFIX = /usr/local
 BINDIR = ${PREFIX}/bin

@@ -69,6 +69,7 @@ void
 usage(void)
 {
 	printf("usage: %s\n\nSee sysmgr(8) for detailed information.\n\nVersion: %s\n", argv0, VERSION);
+	printf("Service Directory: %s\nRun directory: %s\n", sysdir, rundir);
 	exit(1);
 }
 
@@ -78,12 +79,12 @@ int main(int argc, char *argv[])
 	argv0 = argv[0];
 	char sysmgr_pidfile[PATH_MAX];
 
-	if (argc > 1)
-		usage();
-
 	sysdir = getenv_fallback("SYSDIR", sysdir_default);
 	rundir = getenv_fallback("RUNDIR", rundir_default);
 	snprintf(sysmgr_pidfile, PATH_MAX, "%s/pid", rundir);
+
+	if (argc > 1)
+		usage();
 
 	mkdirp(rundir);
 

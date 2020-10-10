@@ -19,7 +19,8 @@ usage(int exitnum)
 	      "    start/stop/restart  Start/stop/restart services\n"
 	      "    once                Start services once\n"
 	      "    status              Check service statuses\n"
-	      "    up/down             Same as start/stop\n\n", stdout);
+	      "    up/down             Same as start/stop\n\n"
+	      "sysmgr-"VERSION"\n", stdout);
 	exit(exitnum);
 }
 

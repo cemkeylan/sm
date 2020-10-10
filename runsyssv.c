@@ -19,7 +19,7 @@ static struct service sv;
 void
 usage(int exitnum)
 {
-	printf("usage: %s [svfile]\n", argv0);
+	printf("usage: %s [svfile]\n\nsysmgr-%s\n", argv0, VERSION);
 	exit(exitnum);
 }
 

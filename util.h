@@ -44,7 +44,6 @@ void *setenv_fallback(char *name, char *fallback);
 /* io.c */
 void die(const char *msg, ...);
 
-
 /* enprintf.c */
 void enprintf(int, const char *, ...);
 void eprintf(const char *, ...);

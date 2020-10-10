@@ -101,6 +101,9 @@ int handle_service(char *operation, char *name)
 int
 main(int argc, char *argv[])
 {
+	/* Variable used by other functions but not in this file itself */
+	(void)(sysdir_default);
+
 	char *rundir;
 	argv0 = argv[0];
 	int i, exitnum;

@@ -14,7 +14,6 @@
 #include "config.h"
 static char *argv0, *lockfile, *svrundir;
 static pid_t syspid, svpid;
-static struct service sv;
 
 void
 usage(int exitnum)
@@ -43,10 +42,11 @@ term(int sig)
 int
 main(int argc, char *argv[])
 {
+	/* Variables used by other functions but not in this file itself */
+	(void)(sysdir_default);
+	(void)(rundir_default);
+
 	argv0 = argv[0];
-	char *sysdir, *rundir;
-	sysdir = getenv_fallback("SYSDIR", sysdir_default);
-	rundir = getenv_fallback("RUNDIR", rundir_default);
 
 	if (argc == 2) {
 		if (strncmp(argv[1], "-", 1) == 0)

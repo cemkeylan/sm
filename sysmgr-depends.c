@@ -17,6 +17,10 @@ usage(void)
 int
 main (int argc, char *argv[])
 {
+	/* Variables used by other functions but not in this file itself */
+	(void)(sysdir_default);
+	(void)(rundir_default);
+
 	int i;
 	argv0 = argv[0];
 	if (argc < 2 || strncmp(argv[1], "-", 1) == 0)

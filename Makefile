@@ -38,7 +38,17 @@ LIBUTIL = libutil.a
 
 OBJ = ${BINOBJ} ${LIBUTILOBJ}
 
-all: ${BIN}
+all: options ${BIN}
+
+options:
+	@printf '%s\n' \
+	"build options for sysmgr:" \
+	"PREFIX    = ${PREFIX}" \
+	"BINDIR    = ${BINDIR}" \
+	"MANPREFIX = ${MANPREFIX}" "" \
+	"CFLAGS    = ${CFLAGS}" \
+	"LDFLAGS   = ${LDFLAGS}" \
+	"CPPFLAGS  = ${CPPFLAGS}" ""
 
 ${BIN}: ${LIBUTIL}
 
@@ -76,4 +86,4 @@ uninstall:
 	for bin in ${BIN}; do rm -f ${DESTDIR}${BINDIR}/$${bin}; done
 	for man in ${MAN}; do rm -f ${DESTDIR}${MANPREFIX}/man$${man##*.}/$${man##*/}; done
 
-.PHONY: all clean install uninstall
+.PHONY: all options clean install uninstall

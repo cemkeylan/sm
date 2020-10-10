@@ -45,11 +45,13 @@ int handle_service(char *operation, char *name)
 			return 0;
 		return rm_rf(sv.svrundir);
 	} else if (strcmp(operation, "stop") == 0 || strcmp(operation, "down") == 0) {
+		if(sv_check(&sv, 1) != 0)
+			return 0;
 		pid = getsyspid(&sv);
 		switch (pid) {
 		case -1:
 			perror(NULL);
-			return 1;
+			return -1;
 		default:
 			sv_writelock(sv.lockfile, SIGTERM);
 			kill(pid, SIGTERM);

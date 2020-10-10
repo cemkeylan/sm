@@ -30,7 +30,6 @@ getsyspid(service *sv)
 	pid_t pid;
 
 	if (access(sv->syspidfile, R_OK) == -1) {
-		perror(sv->syspidfile);
 		return -1;
 	}
 	FILE *pidfile;

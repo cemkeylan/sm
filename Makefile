@@ -1,6 +1,3 @@
-PREFIX = /usr/local
-BINDIR = ${PREFIX}/bin
-
 include config.mk
 
 .SUFFIXES:

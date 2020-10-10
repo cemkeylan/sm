@@ -1,5 +1,9 @@
 VERSION = git
 
+PREFIX = /usr/local
+BINDIR = ${PREFIX}/bin
+MANPREFIX = ${PREFIX}/share/man
+
 CC     = cc
 AR     = ar
 RANLIB = ranlib

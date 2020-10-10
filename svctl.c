@@ -90,7 +90,7 @@ int handle_service(char *operation, char *name)
 	} else if (strcmp(operation, "stat") == 0 || strcmp(operation, "status") == 0) {
 		if (sv_check(&sv, 1) < 0) {
 			fprintf(stderr, "%s: DOWN\n", name);
-			exit(1);
+			return -1;
 		} else
 			fprintf(stderr, "%s: UP\n", name);
 	} else
@@ -103,7 +103,7 @@ main(int argc, char *argv[])
 {
 	char *rundir;
 	argv0 = argv[0];
-	int i;
+	int i, exitnum;
 
 	if (argc < 2 || strncmp(argv[1], "-", 1) == 0)
 		usage(0);
@@ -114,6 +114,14 @@ main(int argc, char *argv[])
 	rundir = getenv_fallback("RUNDIR", rundir_default);
 	if (check_rundir(rundir) != 0)
 		die("%s could not be found, are you sure sysmgr is running?", rundir);
+
+	if (strncmp(argv[1], "stat", 4) == 0) {
+		exitnum = 0;
+		for (i=2; i < argc; i++)
+			if(handle_service(argv[1], argv[i]) != 0)
+				exitnum = 1;
+		exit(exitnum);
+	}
 
 	for (i=2; i < argc; i++)
 		if (handle_service(argv[1], argv[i]) != 0)

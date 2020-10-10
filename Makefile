@@ -17,8 +17,7 @@ LIBUTILSRC = \
 	libutil/proc.c \
 	libutil/rm.c \
 	libutil/service.c \
-	libutil/strlcpy.c \
-	libutil/strtonum.c \
+	libutil/strlcpy.c
 
 
 BIN = \

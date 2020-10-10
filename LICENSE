@@ -8,8 +8,6 @@ rm.c
   Taken from https://stackoverflow.com/a/5467788.                  CC BY-SA 2.5
 strlcpy.c
   Taken from sbase. Copyright (c) 1998 Todd C. Miller.              ISC License
-strtonum.c
-  Taken from sbase. Copyright (c) 2004 Ted Unangst and Todd Miller. ISC License
 
 --------------------------------------------------------------------------------
 

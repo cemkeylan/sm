@@ -10,3 +10,4 @@ config.h
 sysmgr
 runsyssv
 svctl
+sysmgr-depends

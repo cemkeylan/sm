@@ -1,0 +1,55 @@
+.TH "SYSMGR" "8" "October 2020" "sysmgr-VERSION" "System Manager's Manual"
+.SH NAME
+sysmgr \- system manager
+.SH DESCRIPTION
+sysmgr is a service supervisor for UNIX systems. It executes the service scripts
+(usually shell scripts) from the service directory and restarts them if they go
+down.
+.SH USAGE
+The operation of sysmgr is manipulated through
+.BR svctl(1),
+and
+.BR RUNDIR
+and
+.BR SYSDIR
+environment variables.
+.SS Defining directories
+The service directory and the run directory can be defined both through the
+config.h file on compilation and during runtime from environment variables.
+.SS Service scripts
+Service scripts can be any executable, but are usually small shell scripts. Here
+is an example:
+.nf
+
+    #!/bin/sh -e
+    exec httpd -f -p 8054 -h /var/www/html
+
+.fi
+The exec call makes sure that sysmgr is tracking the pid of the actual process
+rather than the shell script itself.
+.SH SERVICE DEPENDENCIES
+sysmgr doesn't deal with service dependencies on its own, but a sysmgr-depends
+tool is provided in order to deal with such a requirement. You can use this tool
+in your service scripts to wait until a service is up. The usage is as follows:
+.nf
+
+     #!/bin/sh -e
+     sysmgr-depends dbus
+     exec NetworkManager -n
+
+.fi
+.SH STARTING SYSMGR ON BOOT
+In order to start sysmgr, you need to implement it into your init\-scheme. For
+sysvinit and its clones (such as busybox\-init) add a line to your inittab as
+follows:
+
+.nf
+::respawn:/usr/bin/sysmgr
+.fi
+
+.SH AUTHOR
+Cem Keylan <cem@ckyln.com>
+.SH SEE ALSO
+.BR svctl(1)
+.BR runsyssv(1)
+.BR sysmgr-depends(1)

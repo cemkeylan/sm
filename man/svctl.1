@@ -1,0 +1,28 @@
+.TH "SVCTL" "1" "October 2020" "sysmgr-VERSION" "General Commands Manual"
+.SH NAME
+svctl \- service controller for sysmgr
+.SH SYNOPSIS
+svctl [operation] [service...]
+.SH DESCRIPTION
+svctl is a tool to interact with sysmgr services, and make sure they are started
+or stopped properly. It has the following operations:
+.TP
+.B start/up
+starts the given services
+.TP
+.B stop/down
+stops the given services
+.TP
+.B restart
+restarts the given services
+.TP
+.B once
+starts a services and doesn't restart it if it ever goes down
+.TP
+.B stat/status
+prints the status of the services, returns with exit status 1 if any of the
+given services are down.
+.SH AUTHOR
+Cem Keylan <cem@ckyln.com>
+.SH SEE ALSO
+.BR sysmgr(8)

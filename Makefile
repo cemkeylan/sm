@@ -18,10 +18,17 @@ LIBUTILSRC = \
 
 
 BIN = \
-      sysmgr \
-      runsyssv \
-      svctl \
-      sysmgr-depends
+	sysmgr \
+	runsyssv \
+	svctl \
+	sysmgr-depends
+
+MAN = \
+	man/runsyssv.1 \
+	man/svctl.1 \
+	man/sysmgr-depends.1 \
+	man/sysmgr.8
+
 
 SRC = ${BIN:=.c}
 BINOBJ = ${SRC:.c=.o}
@@ -59,8 +66,14 @@ install: all
 	mkdir -p ${DESTDIR}${BINDIR}
 	cp ${BIN} ${DESTDIR}${BINDIR}
 	for bin in ${BIN}; do chmod 755 ${DESTDIR}${BINDIR}/$${bin}; done
+	for man in ${MAN}; do \
+		mkdir -p ${DESTDIR}${MANPREFIX}/man$${man##*.}; \
+		cp $${man} ${DESTDIR}${MANPREFIX}/man$${man##*.}/$${man##*/}; \
+		chmod 644 ${DESTDIR}${MANPREFIX}/man$${man##*.}/$${man##*/}; \
+	done
 
 uninstall:
 	for bin in ${BIN}; do rm -f ${DESTDIR}${BINDIR}/$${bin}; done
+	for man in ${MAN}; do rm -f ${DESTDIR}${MANPREFIX}/man$${man##*.}/$${man##*/}; done
 
 .PHONY: all clean install uninstall

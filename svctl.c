@@ -110,8 +110,6 @@ main(int argc, char *argv[])
 	else if (argc < 3)
 		usage(1);
 
-	char **sv = argv + 1;
-
 	/* Check if the RUNDIR exists */
 	rundir = getenv_fallback("RUNDIR", rundir_default);
 	if (check_rundir(rundir) != 0)

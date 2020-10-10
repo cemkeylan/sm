@@ -68,7 +68,7 @@ install: all
 	for bin in ${BIN}; do chmod 755 ${DESTDIR}${BINDIR}/$${bin}; done
 	for man in ${MAN}; do \
 		mkdir -p ${DESTDIR}${MANPREFIX}/man$${man##*.}; \
-		cp $${man} ${DESTDIR}${MANPREFIX}/man$${man##*.}/$${man##*/}; \
+		sed 's|VERSION|${VERSION}|' < $${man} > ${DESTDIR}${MANPREFIX}/man$${man##*.}/$${man##*/}; \
 		chmod 644 ${DESTDIR}${MANPREFIX}/man$${man##*.}/$${man##*/}; \
 	done
 

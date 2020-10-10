@@ -46,13 +46,10 @@ term(int sig)
 		char realfile[PATH_MAX];
 		sprintf(realfile, "%s/%s", rundir, ent->d_name);
 
-		printf("%s\n", ent->d_name);
-
 		if (strncmp(ent->d_name, ".", 1) == 0 ||
 		    strcmp(ent->d_name, "pid") == 0)
 			continue;
 
-		printf("%s\n", ent->d_name);
 		struct service sv;
 		sv_init(&sv, ent->d_name);
 		pid_t pid = getsyspid(&sv);

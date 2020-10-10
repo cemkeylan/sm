@@ -20,7 +20,8 @@ LIBUTILSRC = \
 BIN = \
       sysmgr \
       runsyssv \
-      svctl
+      svctl \
+      sysmgr-depends
 
 SRC = ${BIN:=.c}
 BINOBJ = ${SRC:.c=.o}
